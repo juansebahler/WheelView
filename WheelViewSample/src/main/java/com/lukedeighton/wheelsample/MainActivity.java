@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class MainActivity extends Activity {
 
-    private static final int ITEM_COUNT = 20;
+    private static final int ITEM_COUNT = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         final WheelView wheelView = (WheelView) findViewById(R.id.wheelview);
+
+        wheelView.setWheelItemCount(ITEM_COUNT);
 
         //create data for the adapter
         List<Map.Entry<String, Integer>> entries = new ArrayList<Map.Entry<String, Integer>>(ITEM_COUNT);
@@ -46,18 +48,35 @@ public class MainActivity extends Activity {
                 Map.Entry<String, Integer> selectedEntry = ((MaterialColorAdapter) parent.getAdapter()).getItem(position);
                 parent.setSelectionColor(getContrastColor(selectedEntry));
             }
+            @Override
+            public void onWheelItemSettled(WheelView parent, Drawable itemDrawable, int position) {
+                //get the item at this position
+
+                Toast.makeText(MainActivity.this, "Position: " + position, Toast.LENGTH_LONG).show();
+            }
+
+
         });
 
         wheelView.setOnWheelItemClickListener(new WheelView.OnWheelItemClickListener() {
             @Override
             public void onWheelItemClick(WheelView parent, int position, boolean isSelected) {
                 String msg = String.valueOf(position) + " " + isSelected;
-                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
             }
         });
 
         //initialise the selection drawable with the first contrast color
         wheelView.setSelectionColor(getContrastColor(entries.get(0)));
+
+
+        wheelView.setOnWheelAngleChangeListener(new WheelView.OnWheelAngleChangeListener() {
+            @Override
+            public void onWheelAngleChange(float angle) {
+                //the new angle of the wheel
+            }
+
+        });
 
         /*
         new Handler().postDelayed(new Runnable() {

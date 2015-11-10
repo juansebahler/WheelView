@@ -348,6 +348,7 @@ public class WheelView extends View {
          * @param position of the adapter that is closest to the selection angle
          */
         void onWheelItemSelected(WheelView parent, Drawable itemDrawable, int position);
+        void onWheelItemSettled(WheelView parent, Drawable itemDrawable, int position);
 
         //TODO onWheelItemSettled?
     }
@@ -1183,7 +1184,27 @@ public class WheelView extends View {
         if (mAngularVelocity != 0f) {
             addAngle(mAngularVelocity * deltaTime);
         } else {
+
+            if (mRequiresUpdate) {
+                if (mOnItemSelectListener != null && !isEmptyItemPosition(getSelectedPosition())) {
+                    int adapterPos = getSelectedPosition();
+                    mOnItemSelectListener.onWheelItemSettled(this, getWheelItemDrawable(adapterPos), adapterPos);
+                }
+            }
+
+
             mRequiresUpdate = false;
+
+
+
+
+
+
+
+
+
+
+
         }
     }
 
